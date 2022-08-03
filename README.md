@@ -1,24 +1,24 @@
 # To_Do_List_HomeWork_Group_4_GB
 
-# ПРограмма создания и хранения списка дел / прочего
+# Программа создания и хранения списка дел / прочего
 
 ## Структура программы
 1. main
 2. controller
 3. interface
-4. worck with base
+4. work with base
     * create base - start
-        1. Foloder By name
-        2. In foloder:
+        1. Folder By name
+        2. In folder:
             * To do
                 1. Base_list
                 2. Active list
                 3. Comlited list
                 4. deleted_list
-            * Personal list
-            * Comments
-            * Cook_list
-            * To_Buy_list
+            * ~~Personal list~~
+            * ~~Comments~~
+            * ~~Cook_list~~
+            * ~~To_Buy_list~~
     * look up
     * change
     * delete
@@ -29,7 +29,7 @@
 9. User_base =)
     * Хочу добавить проверку на админа
     * Хочу иметь списко пользователей с паролями, что бы каждый мог видеть только свою базу
-    * Могу заморочиться с проверкой на символы - если время остентся 
+    * ~~Могу заморочиться с проверкой на символы - если время остентся~~ 
 
 ## Структура карточки списка дел
 1. ID_card
