@@ -1,5 +1,6 @@
 import datetime
 from Dictionaris import card_type
+from Dictionaris import type_of_files_dict
 
 def create_a_tas_kard(card_name = "Test",type_of_card = 6,comment = "For testing purp",time_to_do = datetime.datetime(2022,8,4,17)) -> dict:
 
