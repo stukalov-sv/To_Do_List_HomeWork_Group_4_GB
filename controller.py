@@ -8,6 +8,7 @@ import interface as UI
 
 
 
+
 def bases_check():
     WWB.chek_for_user_base(user_data_base_path)
     WWB.foloder_for_new_user_creation(WWB.take_from_base(user_data_base_path))
@@ -17,11 +18,12 @@ def user_button():
     WWB.rewrite_base_with_index_append(WWB.create_a_user(WWB.take_from_base(user_data_base_path)),user_data_base_path)
 
 def  chekin():
-    IO_M.user_access()
+    # Name,Password =IO_M.user_access()
+    # print(Name,Password)
     
-    Name = input("Name : ")
+    # Name = input("Name : ")
 
-    Password = input("Pass : ")
+    # Password = input("Pass : ")
 
     User_ID,User_Name,User_status = WWB.User_chek(Name,Password,WWB.take_from_base(user_data_base_path))
     path_full = WWB.path_creation_for_user_base(User_ID,1,WWB.take_from_base(user_data_base_path))
@@ -38,4 +40,4 @@ def adm_button():
 
     
 
-# WWB.create_a_tas_kard()
+WWB.create_a_tas_kard()

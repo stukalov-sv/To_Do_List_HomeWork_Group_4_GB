@@ -1,12 +1,22 @@
 from tkinter import *
+from unicodedata import name
 # from tkinter import ttk
 # import Dictionaris as dct
-  
+
+global name_to_use
+global pass_to_use
+
 def user_access():
     def clicked_ok():
-        # print(txt_log.get())
-        # print(txt_pass.get())
+        txt_log.get()
+        txt_pass.get()
         window.destroy()
+        # global name_to_use
+        # name_to_use = txt_log.get()
+        # global pass_to_use
+        # pass_to_use = txt_pass.get()
+        # return txt_log.get(),txt_pass.get()
+
 
     def clicked_canc():
         print("Cancel")
@@ -16,6 +26,11 @@ def user_access():
     def clicked_create():
         print("Create new user")
         window.destroy()
+
+    # global pass_to_use
+    # pass_to_use = ""
+    # global name_to_use
+    # name_to_use = ""
 
     window = Tk()  
     window.title("Добро пожаловать")  
@@ -36,8 +51,9 @@ def user_access():
     btn.grid(column=1, row=3)
     btn = Button(window, text="Create new user", command=clicked_create)
     btn.grid(column=2, row=3)
-
+    # print(txt_log.get(),txt_pass.get())
     window.mainloop()
+    # return clicked_ok()
 
 
 

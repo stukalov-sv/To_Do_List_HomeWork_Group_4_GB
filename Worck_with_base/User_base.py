@@ -6,6 +6,7 @@ from Dictionaris import type_of_files_dict
 
 def User_chek(user_name :str,pass_word :str,data :dict):
     data_take = dict(filter(lambda x : x[1]["User_Name"] == user_name and x[1]["Pass_word"] == pass_word  , data.items()))
+    print(data_take)
     if len(data_take) < 1:
         data_take=create_a_user(user_name = user_name,Pass_word = pass_word)
     id_num = list(data_take)[0]
