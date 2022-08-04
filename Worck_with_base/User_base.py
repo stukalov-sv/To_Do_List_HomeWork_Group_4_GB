@@ -28,3 +28,10 @@ def path_creation_for_user_base(id_user : int ,type_of_base:int,data : dict) -> 
   
 
 
+    # User_ID = max(data_base["User_ID"])+1
+    # User_Name = user_name
+    # Pass_word = Pass_wordd
+    # Permission = perm
+    # Other_info = other_inf
+    # return {}
+
