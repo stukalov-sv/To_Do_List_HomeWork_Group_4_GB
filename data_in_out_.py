@@ -1,6 +1,6 @@
 from tkinter import *
-# from tkinter import ttk
-# import Dictionaris as dct
+from tkinter import ttk
+import Dictionaris as dct
   
 def user_access():
     def clicked_ok():
@@ -58,8 +58,9 @@ def card_create(dict_of_rows: dict):
 
 
     for i, j in dict_of_rows.items():
-        Message(window, width=350, text=j) \
-                .grid(row=i, column=0, sticky=W)
+        if i > 0:
+            Message(window, width=350, text=j) \
+                    .grid(row=i, column=0, sticky=W)
 
 
     txt_name = Entry(window, width=22)
@@ -105,8 +106,9 @@ def colums_output(dict_of_rows : dict , data : dict):
     card_frame_0 = LabelFrame(window, text='ID')
     card_frame_0.grid(row=0, column=0)
     for i, j in dict_of_rows.items():
-        Message(card_frame_0, width=350, text=j) \
-                .grid(row=i, column=0, sticky=W)
+        if i > 0:
+            Message(card_frame_0, width=350, text=j) \
+                    .grid(row=i, column=0, sticky=W)
     
     for y in range(len(new_list)):
         card_frame = LabelFrame(window, text=f'{new_list_index[y]}')
@@ -119,15 +121,6 @@ def colums_output(dict_of_rows : dict , data : dict):
 
     window.mainloop()
 
-
-tel_row = \
-    {
-        1 : "Name" ,
-        2 : "Type_of_card" ,
-        3 : "Comment",
-        4 : "Time_to_do",
-        5 : "Create_time"
-    }
 
 data = {
     "0": {
@@ -174,7 +167,7 @@ data = {
     }
   }
 
-# user_access()
-# card_create(dct.cards_dictionary.card_id_dict)
-colums_output(tel_row, data)
+user_access()
+card_create(dct.cards_dictionary.card_id_dict)
+# colums_output(dct.cards_dictionary.card_id_dict, data)
 
