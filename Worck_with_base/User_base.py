@@ -9,4 +9,3 @@ def create_a_user(data_base : dict,user_Id = "",user_name= "",Pass_wordd = "",pe
     Permission = perm
     Other_info = other_inf
     return {}
-
