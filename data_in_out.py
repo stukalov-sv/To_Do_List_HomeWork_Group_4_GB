@@ -1,21 +1,15 @@
 from tkinter import *
 from unicodedata import name
-# from tkinter import ttk
-# import Dictionaris as dct
+from tkinter import ttk
+import Dictionaris as dct
 
-global name_to_use
-global pass_to_use
 
 def user_access():
     def clicked_ok():
-        txt_log.get()
-        txt_pass.get()
+        global name_to_use, pass_to_use
+        name_to_use = txt_log.get()
+        pass_to_use = txt_pass.get()
         window.destroy()
-        # global name_to_use
-        # name_to_use = txt_log.get()
-        # global pass_to_use
-        # pass_to_use = txt_pass.get()
-        # return txt_log.get(),txt_pass.get()
 
 
     def clicked_canc():
@@ -27,10 +21,9 @@ def user_access():
         print("Create new user")
         window.destroy()
 
-    # global pass_to_use
-    # pass_to_use = ""
-    # global name_to_use
-    # name_to_use = ""
+    global pass_to_use, name_to_use
+    pass_to_use = None
+    name_to_use = None
 
     window = Tk()  
     window.title("Добро пожаловать")  
@@ -51,24 +44,31 @@ def user_access():
     btn.grid(column=1, row=3)
     btn = Button(window, text="Create new user", command=clicked_create)
     btn.grid(column=2, row=3)
-    # print(txt_log.get(),txt_pass.get())
-    window.mainloop()
-    # return clicked_ok()
 
+    window.mainloop()
+    return name_to_use, pass_to_use
 
 
 def card_create(dict_of_rows: dict):
     def clicked_ok():
-        print(txt_name.get())
-        print(combo_toc.get())
-        print(txt_comm.get())
-        print(txt_ttd.get())
-        print(txt_ctime.get())
+        global user_name, toc, comm, ttd, ctime
+        user_name = txt_name.get()
+        toc = combo_toc.get()
+        comm = txt_comm.get()
+        ttd = txt_ttd.get()
+        ctime = txt_ctime.get()
         window.destroy()
 
     def clicked_canc():
         print("Cancel")
         window.destroy()
+
+    global user_name, toc, comm, ttd, ctime
+    user_name = None
+    toc = None
+    comm = None
+    ttd = None
+    ctime = None
 
     window = Tk()
     window.title("Создание карточки")
@@ -103,6 +103,7 @@ def card_create(dict_of_rows: dict):
     btn.grid(column=1, row=7)
 
     window.mainloop()
+    return user_name, toc, comm, ttd, ctime
     
 def colums_output(dict_of_rows : dict , data : dict):
     window = Tk()
@@ -110,7 +111,7 @@ def colums_output(dict_of_rows : dict , data : dict):
 
     new_list = []
     new_list_index = []
-    print (data.items())
+    # print(data.items())
     for i, item in data.items():
         if type(item) == dict:
             data_new = dict(item.items())
@@ -136,15 +137,6 @@ def colums_output(dict_of_rows : dict , data : dict):
 
     window.mainloop()
 
-
-tel_row = \
-    {
-        1 : "Name" ,
-        2 : "Type_of_card" ,
-        3 : "Comment",
-        4 : "Time_to_do",
-        5 : "Create_time"
-    }
 
 data = {
     "0": {
@@ -191,7 +183,9 @@ data = {
     }
   }
 
-# user_access()
-# card_create(dct.cards_dictionary.card_id_dict)
-# colums_output(tel_row, data)
+u_nam, u_pas = user_access()
+u_name, u_toc, u_comm, u_ttd, u_ctime = card_create(dct.cards_dictionary.card_id_dict)
+# colums_output(dct.cards_dictionary.card_id_dict, data)
 
+print(u_nam, u_pas)
+print(u_name, u_toc, u_comm, u_ttd, u_ctime)
