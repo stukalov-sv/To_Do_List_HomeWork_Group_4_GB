@@ -4,8 +4,8 @@ from tkinter import *
   
 def user_access():
     def clicked_ok():
-        print(txt_log.get())
-        print(txt_pass.get())
+        # print(txt_log.get())
+        # print(txt_pass.get())
         window.destroy()
 
     def clicked_canc():
@@ -38,6 +38,7 @@ def user_access():
     btn.grid(column=2, row=3)
 
     window.mainloop()
+
 
 
 def card_create(dict_of_rows: dict):
@@ -176,5 +177,5 @@ data = {
 
 # user_access()
 # card_create(dct.cards_dictionary.card_id_dict)
-colums_output(tel_row, data)
+# colums_output(tel_row, data)
 

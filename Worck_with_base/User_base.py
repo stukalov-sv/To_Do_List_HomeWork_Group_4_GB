@@ -6,6 +6,8 @@ from Dictionaris import type_of_files_dict
 
 def User_chek(user_name :str,pass_word :str,data :dict):
     data_take = dict(filter(lambda x : x[1]["User_Name"] == user_name and x[1]["Pass_word"] == pass_word  , data.items()))
+    if len(data_take) < 1:
+        data_take=create_a_user(user_name = user_name,Pass_word = pass_word)
     id_num = list(data_take)[0]
     return id_num,data_take[id_num]["User_Name"],data_take[id_num]["Permission"],
 
@@ -23,9 +25,8 @@ def create_a_user(user_name= "Test",Pass_word = "Test",perm=0,other_inf ="Some o
     # print(card)
     return card
 
-def path_creation_for_user_base(id_user : int ,type_of_base:int,data : dict) -> str:
+def path_creation_for_user_base(id_user : int ,type_of_base:int,data : dict):
     return f"Data_base/{id_user}_{data[id_user]['User_Name']}/{id_user}_{data[id_user]['User_Name']}_{type_of_files_dict[type_of_base]}_list.json"
-  
 
 
     # User_ID = max(data_base["User_ID"])+1
