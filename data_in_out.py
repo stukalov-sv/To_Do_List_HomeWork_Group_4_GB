@@ -6,24 +6,28 @@ import Dictionaris as dct
 
 def user_access():
     def clicked_ok():
-        global name_to_use, pass_to_use
+        global name_to_use, pass_to_use, action_num
         name_to_use = txt_log.get()
         pass_to_use = txt_pass.get()
+        action_num = 1
         window.destroy()
 
 
     def clicked_canc():
-        print("Cancel")
+        global action_num
+        action_num = 3
         window.destroy()
 
 
     def clicked_create():
-        print("Create new user")
+        global action_num
+        action_num = 2
         window.destroy()
 
-    global pass_to_use, name_to_use
+    global pass_to_use, name_to_use, action_num
     pass_to_use = None
     name_to_use = None
+    action_num = None
 
     window = Tk()  
     window.title("Добро пожаловать")  
@@ -46,7 +50,7 @@ def user_access():
     btn.grid(column=2, row=3)
 
     window.mainloop()
-    return name_to_use, pass_to_use
+    return name_to_use, pass_to_use, action_num
 
 
 def card_create(dict_of_rows: dict):
@@ -183,9 +187,9 @@ data = {
     }
   }
 
-u_nam, u_pas = user_access()
+u_nam, u_pas, u_action = user_access()
 u_name, u_toc, u_comm, u_ttd, u_ctime = card_create(dct.cards_dictionary.card_id_dict)
 # colums_output(dct.cards_dictionary.card_id_dict, data)
 
-print(u_nam, u_pas)
+print(u_nam, u_pas, u_action)
 print(u_name, u_toc, u_comm, u_ttd, u_ctime)
