@@ -50,6 +50,7 @@ def user_access():
     btn.grid(column=2, row=3)
 
     window.mainloop()
+    # print(name_to_use, pass_to_use, action_num)
     return name_to_use, pass_to_use, action_num
 
 
@@ -82,15 +83,12 @@ def card_create(dict_of_rows: dict):
         Message(window, width=350, text=j) \
                 .grid(row=i, column=0, sticky=W)
 
+    type_list = list(dct.card_type.values())
 
     txt_name = Entry(window, width=22)
     txt_name.grid(column=1, row=1)
     combo_toc = ttk.Combobox(window,
-                                values=[
-                                    "background",
-                                    "in_work",
-                                    "done",
-                                    "deleted"])
+                                values=type_list)
     combo_toc.grid(column=1, row=2)
     combo_toc.current(1)
     txt_comm = Entry(window, width=22)
@@ -187,9 +185,9 @@ data = {
     }
   }
 
-u_nam, u_pas, u_action = user_access()
-u_name, u_toc, u_comm, u_ttd, u_ctime = card_create(dct.cards_dictionary.card_id_dict)
-# colums_output(dct.cards_dictionary.card_id_dict, data)
+# u_nam, u_pas, u_action = user_access()
+# u_name, u_toc, u_comm, u_ttd, u_ctime = card_create(dct.cards_dictionary.card_id_dict)
+# # colums_output(dct.cards_dictionary.card_id_dict, data)
 
-print(u_nam, u_pas, u_action)
-print(u_name, u_toc, u_comm, u_ttd, u_ctime)
+# print(u_nam, u_pas, u_action)
+# print(u_name, u_toc, u_comm, u_ttd, u_ctime)
