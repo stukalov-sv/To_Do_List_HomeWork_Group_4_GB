@@ -24,6 +24,26 @@ def check_value_is_digit_and_return_it(input_value:str):
             exit()
     return number
 
+# Функция ограничения попыток неправильного ввода
+def invalid_input_limit (dictionary: dict, limit = 3):
+    count = 0
+    while count < limit:
+        option_value = check_value_is_digit_and_return_it(dictionary[0])
+        if 0 <= option_value < len(dictionary):
+            if option_value == 1:
+                print (dictionary[1])
+                break
+            elif option_value == 2:
+                print (dictionary[2])
+                break
+            elif option_value == 3:
+                print (dictionary[3])
+                break    
+        else:
+            print(f'Неверный ввод. У вас осталось {2-count} попыток ввода')
+            count +=1
+    return option_value
+
 # функция счетчика неверных попыток ввода и автоматическим закрытием программы
 # при их превышении 
 def input_options (
