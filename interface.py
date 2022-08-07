@@ -23,6 +23,66 @@ def options_create_or_find_deals ():
     option_value = input_limit (dic.dict_start_deals)
     return option_value
     
+def input_options_what_to_do (opt_inquiry = '\nЧто хотите сделать? Найти дело [1],  Создать дело [2] Вывести список дел [3]: ',
+                        opt_1 = 'Ищем дело .\n',
+                        opt_2 = 'Создаём дело.\n',
+                        opt_3 = 'Будем выводит список дел.\n'):
+    count = 0
+    while count < 3:
+        option_value = check(opt_inquiry)
+        if option_value == 1:
+            print (opt_1)
+            break
+        elif option_value == 2:
+            print (opt_2)
+            break
+        elif option_value == 3:
+            print (opt_3)
+            break
+        else:
+            print(f'Неверный ввод. У вас осталось {2-count} попыток ввода')
+            count +=1
+    return option_value 
+def input_options_how_to_find (opt_inquiry = '\nКак будем искать дело? По дате [1],  По Типу [2] По названию [3]: ',
+                        opt_1 = 'Ищем дело по дате .\n',
+                        opt_2 = 'Ищем дело по типу.\n',
+                        opt_3 = 'Ищем дело по названию.\n'):
+    count = 0
+    while count < 3:
+        option_value = check(opt_inquiry)
+        if option_value == 1:
+            print (opt_1)
+            break
+        elif option_value == 2:
+            print (opt_2)
+            break
+        elif option_value == 3:
+            print (opt_3)
+            break
+        else:
+            print(f'Неверный ввод. У вас осталось {2-count} попыток ввода')
+            count +=1
+    return option_value   
+
+# Выбираем опцию работы со списками дел
+def options_create_or_find_deals ( opt_inquiry = 'Будете создавать новую задачу или искать уже созданную? Создать [1],  Поиск задачи для просмотра/изменения/удаления [2]: ',
+                                opt_1 = 'Создать новый список дел.\n',
+                                opt_2 = 'Просмотреть весь список дел.\n'):
+    count = 0
+    while count < 3:
+        option_value = check(opt_inquiry)
+        if option_value == 1:
+            print (opt_1)
+            break
+        elif option_value == 2:
+            print (opt_2)
+            break
+        else:
+            print(f'Неверный ввод. У вас осталось {2-count} попыток ввода')
+            count +=1
+    return option_value
+
+
 # Выбираем опцию работы с уже существующим списком дел
 def options_deals ():
     option_value = input_limit (dic.dict_options_deals)
@@ -71,6 +131,26 @@ def finish_options ():
         say_bye ()
     return option_value
     
+
+# def repeat_options (user_name,
+#                         opt_inquiry = 'Повторить последнюю задачу? Да [1] или Нет [2]: ',
+#                         opt_1 = 'Повторяем.\n',
+#                         opt_2 = 'Прошли.\n'):
+#     count = 0
+#     while count < 3:
+#         option_value = check(opt_inquiry)
+#         if option_value == 1:
+#             print (opt_1)
+#             say_bye (user_name)
+#             break
+#         elif option_value == 2:
+#             print (opt_2)
+#             break
+#         else:
+#             print(f'Неверный ввод. У вас осталось {2-count} попыток ввода')
+#             count +=1
+#     return option_value
+
 # затычка - коротенькая проверка на повтор =)
 def repeat_options ():
     result = input("Повторить ? y - > да / n - > нет")
