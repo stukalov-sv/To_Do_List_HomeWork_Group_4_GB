@@ -1,3 +1,5 @@
+import os
+import json
 from tkinter import *
 from unicodedata import name
 from tkinter import ttk
@@ -133,61 +135,21 @@ def colums_output(dict_of_rows : dict , data : dict):
         card_frame.grid(row=0, column=y+1)
         row_count = 0
         for i, j in new_list[y].items():
-            Message(card_frame, width=300, text=j) \
-                    .grid(row=row_count+1, column=y+1)
-            row_count += 1
+                Message(card_frame, width=300, text=j) \
+                        .grid(row=row_count+1, column=y+1)
+                row_count += 1
 
     window.mainloop()
 
+test_path = os.path.join('Data_base', '1_Test', '1_Test_full_list.json')
 
-data = {
-    "0": {
-      "Name": "Igor",
-      "Type_of_card": "Penschii",
-      "Comment": "male",
-      "Time_to_do": "friend",
-      "Create_time": "+ 373 68 032305"
-    },
-    "1": {
-      "Name": "Artiom",
-      "Type_of_card": "S",
-      "Comment": "male",
-      "Time_to_do": "family",
-      "Create_time": "+ 373 68 482305"
-    },
-    "2": {
-      "Name": "Oleg",
-      "Type_of_card": "S",
-      "Comment": "male",
-      "Time_to_do": "tovarish",
-      "Create_time": "+ 373 78 482305"
-    },
-    "3": {
-      "Name": "Liza",
-      "Type_of_card": "S",
-      "Comment": "female",
-      "Time_to_do": "person",
-      "Create_time": "+ 373 78 482305"
-    },
-    "4": {
-      "Name": "Kira",
-      "Type_of_card": "S",
-      "Comment": "female",
-      "Time_to_do": "family",
-      "Create_time": "+ 373 78 482305"
-    },
-    "6": {
-      "Name": "Liza",
-      "Type_of_card": "S",
-      "Comment": "female",
-      "Time_to_do": "family",
-      "Create_time": "+ 373 78 482305"
-    }
-  }
+with open(test_path) as file:
+    test_card = json.load(file)
+    print(test_card)
 
 # u_nam, u_pas, u_action = user_access()
 # u_name, u_toc, u_comm, u_ttd, u_ctime = card_create(dct.cards_dictionary.card_id_dict)
-# # colums_output(dct.cards_dictionary.card_id_dict, data)
+# colums_output(dct.cards_dictionary.card_id_dict, test_card)
 
 # print(u_nam, u_pas, u_action)
 # print(u_name, u_toc, u_comm, u_ttd, u_ctime)
