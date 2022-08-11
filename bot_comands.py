@@ -3,6 +3,7 @@ import os
 from telegram import Update, Bot, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, Filters, MessageHandler, ConversationHandler, Filters
 from config import TOKEN
+from data_in_out import *
 
 
 def help(update, context):
@@ -64,9 +65,6 @@ def log_pass_check() -> bool:
         return False
 
 
-LOGIN, END = range(2)
-
-
 def u_start(update, _):
     update.message.reply_text(
         'Enter your login or /cancel to cancel')
@@ -100,9 +98,35 @@ def cancel(update, _):
     return ConversationHandler.END
 
 
-global id_login, id_pass
-path = os.path.join('Data_base', 'user_base.json')
+def choose(update, context):
+    reply_keyboard = [['/all', '/active'], ['/done', '/deleted'], ['/cl_choose']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+    update.message.reply_text("Choose what's next", reply_markup=markup_key)
 
-with open(path) as file:
+
+def cl_choose(update, _):
+    update.message.reply_text('Ok', reply_markup=ReplyKeyboardRemove())
+
+
+# def add(update, context):
+
+def all(update, _):
+    colums_output(dct.cards_dictionary.card_id_dict, test_card_bot)
+
+
+global id_login, id_pass
+
+LOGIN, END = range(2)
+
+user_path = os.path.join('Data_base', 'user_base.json')
+
+with open(user_path) as file:
     global user_base
     user_base = json.load(file)
+
+
+test_path = os.path.join('Data_base', '1_Test', '1_Test_full_list.json')
+
+with open(test_path) as file:
+    global test_card_bot
+    test_card_bot = json.load(file)
