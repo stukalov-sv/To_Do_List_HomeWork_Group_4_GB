@@ -5,11 +5,6 @@ from constants import user_data_base_path
 import data_in_out as IO_M
 import interface as UI
 
-
-
-
-
-
 def bases_check():
     WWB.chek_for_user_base(user_data_base_path)
     WWB.foloder_for_new_user_creation(WWB.take_from_base(user_data_base_path))
@@ -66,29 +61,35 @@ def adm_button():
             else :
                 print(f"Hello {Name} , nice to see you =)")
     option = UI.input_options_what_to_do()
+    repeat_option_1 = True
     match option:   
         case 1:
             option_2 =UI.input_options_how_to_find()
-            match option_2:
-            # Поиск по дате
-                case 1: 
-                    for i in WWB.take_from_base(path_full).values():
-                        print(i["Time_to_do"])
-                    date = input("Enter date to find : ")
-                    data = WWB.look_up_by_date(date,WWB.take_from_base(path_active))
-            # Поиск по типу
-                case 2:
-                    for i in WWB.take_from_base(path_full).values():
-                        print(i["Type_of_card"])
-                    Type = input("Enter type to find : ")
-                    data = WWB.look_up_by_type(Type,WWB.take_from_base(path_active))
-            # Поиск по имени
-                case 3 :
-                    for i in WWB.take_from_base(path_full).values():
-                        print(i["Name"])
-                    name = input("Enter name to find : ")
-                    data = WWB.look_up_by_name(name,WWB.take_from_base(path_active))
-            
+            while repeat_option_1:
+                match option_2:
+                # Поиск по дате
+                    case 1: 
+                        for i in WWB.take_from_base(path_active).values():
+                            print(i["Time_to_do"])
+                        date = input("Enter date to find : ")
+                        data = WWB.look_up_by_date(date,WWB.take_from_base(path_active))
+                # Поиск по типу
+                    case 2:
+                        for i in WWB.take_from_base(path_active).values():
+                            print(i["Type_of_card"])
+                        Type = input("Enter type to find : ")
+                        data = WWB.look_up_by_type(Type,WWB.take_from_base(path_active))
+                # Поиск по имени
+                    case 3 :
+                        for i in WWB.take_from_base(path_active).values():
+                            print(i["Name"])
+                        name = input("Enter name to find : ")
+                        data = WWB.look_up_by_name(name,WWB.take_from_base(path_active))
+                if not data:
+                    print("Not found , try again")
+                else :
+                    IO_M.colums_output(dict_of_rows= Dic.card_id_dict , data=data)
+                    repeat_option_1 = False
             repeat_option_2 = 1
             option_3 = UI.options_deals()
             while repeat_option_2 == 1:
@@ -138,7 +139,13 @@ def adm_button():
             WWB.rewrite_base_with_index_append(WWB.create_a_tas_kard(card_name,type_of_card,comment,time_to_do),path_full)
             WWB.rewrite_base(WWB.copy_to_other_base(WWB.take_from_base(path_full),path_active,int(max(WWB.take_from_base(path_full).keys()))),path_active)
             IO_M.colums_output(Dic.card_id_dict,WWB.take_from_base(path_full)[int(max(WWB.take_from_base(path_full).keys()))])
-        # case 3:
-            # Актуальный
-            # Выполненный
+        case 3:
+            try:
+                IO_M.colums_output(dict_of_rows= Dic.card_id_dict , data= WWB.take_from_base(path_active))
+            except:
+                print("No active tasks")
+            try:
+                IO_M.colums_output(dict_of_rows= Dic.card_id_dict , data= WWB.take_from_base(path_done))
+            except:
+                print("No done tasks")
 

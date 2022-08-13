@@ -4,7 +4,13 @@ from telegram import Update, Bot, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, Filters, MessageHandler, ConversationHandler, Filters
 from config import TOKEN
 from data_in_out import *
+import Worck_with_base as WWB
+from constants import user_data_base_path
 
+# User_Bot
+# AIOGramm
+# Telephone
+# todo
 
 def help(update, context):
     context.bot.send_message(update.effective_chat.id, '/help - помощь\n'
@@ -48,6 +54,7 @@ def user_pass_access(update, context):
                 if i == text[0]:
                     id_pass = str(count)
                     print(text[0], str(count))
+                    log_pass_check()
                     return text[0], str(count)
             else:
                 count += 1
@@ -58,8 +65,17 @@ def user_pass_access(update, context):
 
 
 def log_pass_check() -> bool:
-    global id_login, id_pass
+    global id_login, id_pass,path_full,path_active,path_deleted,path_done
+    path_full = None
+    path_active = None
+    path_done = None
+    path_deleted = None
     if id_login == id_pass:
+        path_full = WWB.path_creation_for_user_base(id_login,1,WWB.take_from_base(user_data_base_path))
+        print(path_full)
+        path_active = WWB.path_creation_for_user_base(id_login,2,WWB.take_from_base(user_data_base_path))
+        path_done = WWB.path_creation_for_user_base(id_login,3,WWB.take_from_base(user_data_base_path))
+        path_deleted = WWB.path_creation_for_user_base(id_login,4,WWB.take_from_base(user_data_base_path))
         return True
     else:
         return False
@@ -111,10 +127,15 @@ def cl_choose(update, _):
 # def add(update, context):
 
 def all(update, _):
-    colums_output(dct.cards_dictionary.card_id_dict, test_card_bot)
+    global path_full
+    colums_output(dct.cards_dictionary.card_id_dict, WWB.take_from_base(path_full))
+def active(update, _):
+    global path_active
+    colums_output(dct.cards_dictionary.card_id_dict, WWB.take_from_base(path_active))
 
 
-global id_login, id_pass
+
+global id_login, id_pass ,path_full , path_active , path_deleted , path_done
 
 LOGIN, END = range(2)
 
@@ -125,8 +146,8 @@ with open(user_path) as file:
     user_base = json.load(file)
 
 
-test_path = os.path.join('Data_base', '1_Test', '1_Test_full_list.json')
+# test_path = os.path.join('Data_base', '1_Test', '1_Test_full_list.json')
 
-with open(test_path) as file:
-    global test_card_bot
-    test_card_bot = json.load(file)
+# with open(test_path) as file:
+#     global test_card_bot
+#     test_card_bot = json.load(file)

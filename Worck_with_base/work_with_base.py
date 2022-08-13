@@ -1,3 +1,4 @@
+from email.mime import base
 import json
 
 def rewrite_base_with_index_append(dictionary_to_add : dict,path : str):
@@ -37,9 +38,15 @@ def copy_to_other_base(data_card:dict, path_to:str, id_card : int):
     return base_to_rewrite
 
 def delete_element_by_id(base_from : dict , id_card : int):
-    print(id_card,base_from)
-    x = base_from.pop(id_card)
+    # print(id_card,base_from)
+    # x = base_from.pop(id_card)
+    try:
+        del base_from[str(id_card)]
+    except:
+        print(f"No task with ID {id_card}")
     return base_from
+
+# [meal.pop(key) for key in ['fats', 'proteins']]
 
 def move_from_active_to_complete(base_active : dict , base_complete : dict , id_card):
     data = base_active.pop(id_card)
