@@ -191,13 +191,13 @@ def comment(update, _):
 
 # время выполнения
 def time_to_do(update, _):
-    global card_name,card_toc,card_comment
+    global card_name, card_toc, card_comment
     card_ttd = update.message.text
     print(update.message.text)
+    WWB.rewrite_base_with_index_append(WWB.create_a_tas_kard(card_name=card_name, type_of_card=card_toc, comment=card_comment, time_to_do=card_ttd), path_full)
+    WWB.rewrite_base(WWB.copy_to_other_base(WWB.take_from_base(path_full), path_active, int(max(WWB.take_from_base(path_full).keys()))), path_active)
     reply_keyboard = [['Yes', 'No']]
     markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
-    WWB.rewrite_base_with_index_append(WWB.create_a_tas_kard(card_name=card_name,type_of_card=card_toc,comment=card_comment,time_to_do=card_ttd),path_full)
-    WWB.rewrite_base(WWB.copy_to_other_base(WWB.take_from_base(path_full),path_active,int(max(WWB.take_from_base(path_full).keys()))),path_active)
     update.message.reply_text(
         'Something else?', reply_markup=markup_key)
     return ELSE
@@ -238,7 +238,7 @@ def relevance(update, _):
     print(find_rel)
     match find_type:
                 # Поиск по дате
-        case "Time_to_do": 
+        case "Time_to_do":
             # for i in WWB.take_from_base(path_active).values():
             #     print(i["Time_to_do"])
             date = find_rel
@@ -258,9 +258,9 @@ def relevance(update, _):
     print(data)
     if not data:
         update.message.reply_text(
-        'Data not found , try again /find_card' )
+        'Data not found , try again /find_card or /choose to new request' )
         return ConversationHandler.END
-    else :
+    else:
         colums_output(dict_of_rows= Dic.card_id_dict , data=data)
     reply_keyboard = [['Yes', 'No']]
     markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
@@ -350,10 +350,13 @@ global id_login, id_pass, \
 approve = False
 
 LOGIN, PASSWORD, CREATE = range(3)
-NAME, TOC, COMMENT, TIMEDO, ELSE = range(5)
 FIND, RELEVANCE, ELSE = range(3)
-ID_CARD, DATA_FIELD, DATA_CHANGE, ELSE = range(4)
 APPROVMENT, DEL_CARD, ELSE = range(3)
+ID_CARD, DATA_FIELD, DATA_CHANGE, ELSE = range(4)
+NAME, TOC, COMMENT, TIMEDO, ELSE = range(5)
+
+
+
 
 user_path = os.path.join('Data_base', 'user_base.json')
 

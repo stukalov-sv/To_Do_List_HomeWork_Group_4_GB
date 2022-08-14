@@ -17,7 +17,7 @@ conv_handler_login = ConversationHandler(
     states={
         LOGIN: [MessageHandler(Filters.text & ~Filters.command, login)],
         PASSWORD: [MessageHandler(Filters.text & ~Filters.command, password)],
-        CREATE: [MessageHandler(Filters.text & ~Filters.command, create)],
+        CREATE: [MessageHandler(Filters.text & ~Filters.command, create)]
     },
     fallbacks=[CommandHandler('cancel', cancel)],
 )
@@ -29,7 +29,7 @@ conv_handler_new_card = ConversationHandler(
         TOC: [MessageHandler(Filters.regex('^(To Do|To call|Meeting|Study|Personal|Other)$'), toc)],
         COMMENT: [MessageHandler(Filters.text & ~Filters.command, comment)],
         TIMEDO: [MessageHandler(Filters.text & ~Filters.command, time_to_do)],
-        ELSE: [MessageHandler(Filters.regex('^(Yes|No)$'), some_else)],
+        ELSE: [MessageHandler(Filters.regex('^(Yes|No)$'), some_else)]
     },
     fallbacks=[CommandHandler('cancel', cancel)],
 )
@@ -39,7 +39,7 @@ conv_handler_find_card = ConversationHandler(
     states={
         FIND: [MessageHandler(Filters.regex('^(Time_to_do|Type_of_card|Name)$'), find)],
         RELEVANCE: [MessageHandler(Filters.text & ~Filters.command, relevance)],
-        ELSE: [MessageHandler(Filters.regex('^(Yes|No)$'), some_else)],
+        ELSE: [MessageHandler(Filters.regex('^(Yes|No)$'), some_else)]
     },
     fallbacks=[CommandHandler('cancel', cancel)],
 )
@@ -50,7 +50,7 @@ conv_handler_change_card = ConversationHandler(
         ID_CARD: [MessageHandler(Filters.text & ~Filters.command, id_card)],
         DATA_FIELD: [MessageHandler(Filters.regex('^(Name|Type_of_card|Comment|Time_to_do)$'), data_field)],
         DATA_CHANGE: [MessageHandler(Filters.text & ~Filters.command, data_change)],
-        ELSE: [MessageHandler(Filters.regex('^(Yes|No)$'), some_else)],
+        ELSE: [MessageHandler(Filters.regex('^(Yes|No)$'), some_else)]
     },
     fallbacks=[CommandHandler('cancel', cancel)],
 )
@@ -60,7 +60,7 @@ conv_handler_delete_card = ConversationHandler(
     states={
         APPROVMENT: [MessageHandler(Filters.text & ~Filters.command, approvment)],
         DEL_CARD: [MessageHandler(Filters.regex('^(Yes|No)$'), del_card)],
-        ELSE: [MessageHandler(Filters.regex('^(Yes|No)$'), some_else)],
+        ELSE: [MessageHandler(Filters.regex('^(Yes|No)$'), some_else)]
     },
     fallbacks=[CommandHandler('cancel', cancel)],
 )
