@@ -1,3 +1,3 @@
-import controller as cont
+import bot_interface as BI
 
-cont.adm_button()
+BI.bot_start()
