@@ -6,6 +6,7 @@ from config import TOKEN
 from data_in_out import *
 import Worck_with_base as WWB
 from constants import user_data_base_path
+import Dictionaris as Dic
 
 # выводит начальный выбор команд
 def help(update, context):
@@ -186,15 +187,17 @@ def comment(update, _):
     print(card_comment)
     update.message.reply_text(
         'Enter deadline (dd.mm.year). Or /cancel to abort.')
-    return TTD
+    return TIMEDO
 
 # время выполнения
-def ttd(update, _):
-    global card_ttd
+def time_to_do(update, _):
+    global card_name,card_toc,card_comment
     card_ttd = update.message.text
     print(update.message.text)
     reply_keyboard = [['Yes', 'No']]
     markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+    WWB.rewrite_base_with_index_append(WWB.create_a_tas_kard(card_name=card_name,type_of_card=card_toc,comment=card_comment,time_to_do=card_ttd),path_full)
+    WWB.rewrite_base(WWB.copy_to_other_base(WWB.take_from_base(path_full),path_active,int(max(WWB.take_from_base(path_full).keys()))),path_active)
     update.message.reply_text(
         'Something else?', reply_markup=markup_key)
     return ELSE
@@ -230,10 +233,35 @@ def find(update, _):
 
 # вывод искомого
 def relevance(update, _):
-    global find_rel
+    global find_type
     find_rel = update.message.text
     print(find_rel)
-    # colums_output(dct.cards_dictionary.card_id_dict, WWB.take_from_base(path_done))
+    match find_type:
+                # Поиск по дате
+        case "Time_to_do": 
+            # for i in WWB.take_from_base(path_active).values():
+            #     print(i["Time_to_do"])
+            date = find_rel
+            data = WWB.look_up_by_date(date,WWB.take_from_base(path_active))
+                # Поиск по типу
+        case "Type_of_card":
+            # for i in WWB.take_from_base(path_active).values():
+            #     print(i["Type_of_card"])
+            Type = find_rel
+            data = WWB.look_up_by_type(Type,WWB.take_from_base(path_active))
+                # Поиск по имени
+        case "Name" :
+            # for i in WWB.take_from_base(path_active).values():
+            #     print(i["Name"])
+            name = find_rel
+            data = WWB.look_up_by_name(name,WWB.take_from_base(path_active))
+    print(data)
+    if not data:
+        update.message.reply_text(
+        'Data not found , try again /find_card' )
+        return ConversationHandler.END
+    else :
+        colums_output(dict_of_rows= Dic.card_id_dict , data=data)
     reply_keyboard = [['Yes', 'No']]
     markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
     update.message.reply_text(
@@ -268,12 +296,11 @@ def data_field(update, _):
 
 # новые данные
 def data_change(update, _):
-    global card_change
+    global card_field,card_id
     card_change = update.message.text
     print(card_change)
-    # WWB.rewrite_base(
-    # WWB.change(WWB.take_from_base(path_full), Dic.card_id_dict[what_to_change], Dic.card_type[new_info],
-    #             id_to_cange), path_full)
+    WWB.rewrite_base(
+    WWB.change(WWB.take_from_base(path_full), card_field, card_change,card_id), path_full)
     reply_keyboard = [['Yes', 'No']]
     markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
     update.message.reply_text(
@@ -299,9 +326,10 @@ def approvment(update, _):
 
 # функция удаления
 def del_card(update, _):
+    global remove_card
     print(update.message.text)
-    # if update.message.text == 'Yes':
-    # удаление карточки
+    WWB.rewrite_base(WWB.copy_to_other_base(WWB.take_from_base(path_full),path_deleted,remove_card),path_deleted)
+    WWB.rewrite_base(WWB.delete_element_by_id(WWB.take_from_base(path_active),remove_card),path_active)
     update.message.reply_text(
         'Well done', reply_markup=ReplyKeyboardRemove())
     reply_keyboard = [['Yes', 'No']]
@@ -322,7 +350,7 @@ global id_login, id_pass, \
 approve = False
 
 LOGIN, PASSWORD, CREATE = range(3)
-NAME, TOC, COMMENT, TTD, ELSE = range(5)
+NAME, TOC, COMMENT, TIMEDO, ELSE = range(5)
 FIND, RELEVANCE, ELSE = range(3)
 ID_CARD, DATA_FIELD, DATA_CHANGE, ELSE = range(4)
 APPROVMENT, DEL_CARD, ELSE = range(3)

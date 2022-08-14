@@ -34,5 +34,17 @@
     "Pass_word": "ar",
     "Permission": "User",
     "Other_info": "Some one is testing"
+  },
+  "6": {
+    "User_Name": "test2",
+    "Pass_word": "test2",
+    "Permission": "User",
+    "Other_info": "Some one is testing"
+  },
+  "7": {
+    "User_Name": "Name",
+    "Pass_word": "Testing",
+    "Permission": "User",
+    "Other_info": "Some one is testing"
   }
 }

@@ -28,7 +28,7 @@ conv_handler_new_card = ConversationHandler(
         NAME: [MessageHandler(Filters.text & ~Filters.command, name)],
         TOC: [MessageHandler(Filters.regex('^(To Do|To call|Meeting|Study|Personal|Other)$'), toc)],
         COMMENT: [MessageHandler(Filters.text & ~Filters.command, comment)],
-        TTD: [MessageHandler(Filters.text & ~Filters.command, ttd)],
+        TIMEDO: [MessageHandler(Filters.text & ~Filters.command, time_to_do)],
         ELSE: [MessageHandler(Filters.regex('^(Yes|No)$'), some_else)],
     },
     fallbacks=[CommandHandler('cancel', cancel)],
