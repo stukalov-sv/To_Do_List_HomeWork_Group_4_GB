@@ -7,72 +7,24 @@ from data_in_out import *
 import Worck_with_base as WWB
 from constants import user_data_base_path
 
-# User_Bot
-# AIOGramm
-# Telephone
-# todo
-
+# выводит начальный выбор команд
 def help(update, context):
     context.bot.send_message(update.effective_chat.id, '/help - помощь\n'
-                                                       '/login логин - ввод логина\n'
-                                                       '/pass пароль - ввод пароля\n'
-                                                       '/create - создание аккаунта\n')
+                                                       '/start - начало авторизации\n')
 
-
+# отлавливает неизвестные команды
 def unknown(update, context):
-    context.bot.send_message(update.effective_chat.id, f'Incorrect command')
+    context.bot.send_message(update.effective_chat.id, f'Incorrect command. Try /help')
 
-
-def user_login_access(update, context):
-    global user_base, id_login
-    text = context.args
-    count = 0
-    while count < len(user_base):
-        for item in user_base.values():
-            for i in item.values():
-                if i == text[0]:
-                    context.bot.send_message(update.effective_chat.id,
-                                             f'Hello, {text[0]}! Enter password (/pass password)')
-                    id_login = str(count)
-                    print(text[0], str(count))
-                    return text[0], str(count)
-            else:
-                count += 1
-    else:
-        context.bot.send_message(update.effective_chat.id,
-                                 f'There is no {text} user in base. Try again or /create new account')
-        return
-
-
-def user_pass_access(update, context):
-    global user_base, id_pass
-    text = context.args
-    count = 0
-    while count < len(user_base):
-        for item in user_base.values():
-            for i in item.values():
-                if i == text[0]:
-                    id_pass = str(count)
-                    print(text[0], str(count))
-                    log_pass_check()
-                    return text[0], str(count)
-            else:
-                count += 1
-    else:
-        context.bot.send_message(update.effective_chat.id,
-                                 f'Invalid password. Try again')
-        return
-
-
+# проверка соответствия логина с паролем и открытие путей работы с базой
 def log_pass_check() -> bool:
-    global id_login, id_pass,path_full,path_active,path_deleted,path_done
+    global id_login, id_pass, path_full, path_active, path_deleted, path_done
     path_full = None
     path_active = None
     path_done = None
     path_deleted = None
     if id_login == id_pass:
         path_full = WWB.path_creation_for_user_base(id_login,1,WWB.take_from_base(user_data_base_path))
-        print(path_full)
         path_active = WWB.path_creation_for_user_base(id_login,2,WWB.take_from_base(user_data_base_path))
         path_done = WWB.path_creation_for_user_base(id_login,3,WWB.take_from_base(user_data_base_path))
         path_deleted = WWB.path_creation_for_user_base(id_login,4,WWB.take_from_base(user_data_base_path))
@@ -80,74 +32,303 @@ def log_pass_check() -> bool:
     else:
         return False
 
-
+# запускает работу проверки логина и пароля
 def u_start(update, _):
     update.message.reply_text(
-        'Enter your login or /cancel to cancel')
+        'Enter your login. If you do not have account - enter new login. Or /cancel to abort')
     return LOGIN
 
-
+# проверяет логин и отправляет на ввод пароля, либо создание нового пароля к введенному логину
 def login(update, _):
-    global user_base
-    print(update.message.text)
+    global user_base, id_login, new_login
+    count = 0
+    while count < len(user_base):
+        for item in user_base.values():
+            for i in item.values():
+                if i == update.message.text:
+                    update.message.reply_text(
+                        f'Hello {update.message.text}! Enter password. Or /cancel to abort')
+                    id_login = str(count)
+                    print(update.message.text, str(count))
+                    return PASSWORD
+            else:
+                count += 1
+    else:
+        new_login = update.message.text
+        update.message.reply_text(
+            f'{update.message.text} - your login. Enter your password or /cancel to abort')
+        return CREATE
+
+# проверяет правильность ввода пароля
+def password(update, _):
+    global user_base, id_pass, approve
+    count = 0
+    for item in user_base.values():
+        for i in item.values():
+            if i == update.message.text:
+                id_pass = str(count)
+                print(update.message.text, str(count))
+                approve = log_pass_check()
+                if log_pass_check():
+                    update.message.reply_text(
+                        f'Now you can start to use program. Enter /choose')
+                else:
+                    update.message.reply_text(
+                        f'Invalid password. Try again /start')
+                return ConversationHandler.END
+        else:
+            count += 1
+    else:
+        update.message.reply_text(
+            f'Invalid password. Try again /start')
+        return ConversationHandler.END
+
+# создает новый пароль к новому логину
+def create(update, _):
+    global approve, new_login
     for item in user_base.values():
         for i in item.values():
             if i == update.message.text:
                 update.message.reply_text(
-                    f'There is {update.message.text} user already in base. Try again /create')
+                    f'Invalid password, enter other password. Try again /start')
                 return ConversationHandler.END
-            else:
-                update.message.reply_text(
-                    f'{update.message.text} - your login. Enter your password or /cancel to cancel')
-                return END
+    else:
+        WWB.rewrite_base_with_index_append(WWB.create_a_user(new_login, update.message.text), user_data_base_path)
+        WWB.chek_for_user_base(user_data_base_path)
+        WWB.foloder_for_new_user_creation(WWB.take_from_base(user_data_base_path))
+        approve = True
+        update.message.reply_text(
+            f'{update.message.text} - your password. Now you can start to use program. Enter /choose')
+        return ConversationHandler.END
 
-
-def end(update, _):
-    print(update.message.text)
-    update.message.reply_text(
-        f'{update.message.text} - your password. Now you can start to use program')
-    return ConversationHandler.END
-
-
+# отменяет проверку логина/пароля
 def cancel(update, _):
     update.message.reply_text('Good luck')
     return ConversationHandler.END
 
-
+# выводит котекстное меню для работы с базой
 def choose(update, context):
-    reply_keyboard = [['/all', '/active'], ['/done', '/deleted'], ['/cl_choose']]
-    markup_key = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-    update.message.reply_text("Choose what's next", reply_markup=markup_key)
+    if approve:
+        reply_keyboard = [['Choose to view base info'], ['/all', '/active', '/done', '/deleted'],
+                          ['Choose to work with base'], ['/new_card', '/find_card', '/change_card', '/delete_card'],
+                          ['Shut down'], ['/cl_choose']]
+        markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+        update.message.reply_text("Choose what's next", reply_markup=markup_key)
+    else:
+        update.message.reply_text('You do not have access. Please authorize. Enter /start')
 
-
+# закрывает контекстное меню для работы с базой
 def cl_choose(update, _):
-    update.message.reply_text('Ok', reply_markup=ReplyKeyboardRemove())
+    update.message.reply_text('See you later', reply_markup=ReplyKeyboardRemove())
 
-
-# def add(update, context):
 
 def all(update, _):
     global path_full
-    colums_output(dct.cards_dictionary.card_id_dict, WWB.take_from_base(path_full))
+    if approve:
+        colums_output(dct.cards_dictionary.card_id_dict, WWB.take_from_base(path_full))
+    else:
+        update.message.reply_text('You do not have access. Please authorize. Enter /start')
+
+
 def active(update, _):
     global path_active
-    colums_output(dct.cards_dictionary.card_id_dict, WWB.take_from_base(path_active))
+    if approve:
+        colums_output(dct.cards_dictionary.card_id_dict, WWB.take_from_base(path_active))
+    else:
+        update.message.reply_text('You do not have access. Please authorize. Enter /start')
 
 
+def done(update, _):
+    global path_done
+    if approve:
+        colums_output(dct.cards_dictionary.card_id_dict, WWB.take_from_base(path_done))
+    else:
+        update.message.reply_text('You do not have access. Please authorize. Enter /start')
 
-global id_login, id_pass ,path_full , path_active , path_deleted , path_done
 
-LOGIN, END = range(2)
+def deleted(update, _):
+    global path_deleted
+    if approve:
+        colums_output(dct.cards_dictionary.card_id_dict, WWB.take_from_base(path_deleted))
+    else:
+        update.message.reply_text('You do not have access. Please authorize. Enter /start')
+
+# начало создания карточки
+def new_card(update, _):
+    update.message.reply_text(
+        'Enter name of card. Or /cancel to abort', reply_markup=ReplyKeyboardRemove())
+    return NAME
+
+# имя задачи
+def name(update, _):
+    global card_name
+    card_name = update.message.text
+    print(card_name)
+    reply_keyboard = [['To Do', 'To call', 'Meeting', 'Study', 'Personal', 'Other']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+    update.message.reply_text(
+        'Choose type of card. Or /cancel to abort', reply_markup=markup_key)
+    return TOC
+
+# тип задачи
+def toc(update, _):
+    global card_toc
+    card_toc = update.message.text
+    print(card_toc)
+    update.message.reply_text(
+        'Enter description. Or /cancel to abort', reply_markup=ReplyKeyboardRemove())
+    return COMMENT
+
+# описание задачи
+def comment(update, _):
+    global card_comment
+    card_comment = update.message.text
+    print(card_comment)
+    update.message.reply_text(
+        'Enter deadline (dd.mm.year). Or /cancel to abort.')
+    return TTD
+
+# время выполнения
+def ttd(update, _):
+    global card_ttd
+    card_ttd = update.message.text
+    print(update.message.text)
+    reply_keyboard = [['Yes', 'No']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+    update.message.reply_text(
+        'Something else?', reply_markup=markup_key)
+    return ELSE
+
+# запрос других операций
+def some_else(update, _):
+    print(update.message.text)
+    if update.message.text == 'Yes':
+        update.message.reply_text(
+            'Enter /choose', reply_markup=ReplyKeyboardRemove())
+        return ConversationHandler.END
+    else:
+        update.message.reply_text(
+            'Good bye', reply_markup=ReplyKeyboardRemove())
+        return ConversationHandler.END
+
+# старт поиска задач
+def find_card(update, _):
+    reply_keyboard = [['Time_to_do', 'Type_of_card', 'Name']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+    update.message.reply_text(
+        'Choose your search in active tasks. Or /cancel to abort', reply_markup=markup_key)
+    return FIND
+
+# значение искомого
+def find(update, _):
+    global find_type
+    find_type = update.message.text
+    print(find_type)
+    update.message.reply_text(
+        'What will we find. Or /cancel to abort', reply_markup=ReplyKeyboardRemove())
+    return RELEVANCE
+
+# вывод искомого
+def relevance(update, _):
+    global find_rel
+    find_rel = update.message.text
+    print(find_rel)
+    # colums_output(dct.cards_dictionary.card_id_dict, WWB.take_from_base(path_done))
+    reply_keyboard = [['Yes', 'No']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+    update.message.reply_text(
+        'Something else?', reply_markup=markup_key)
+    return ELSE
+
+# старт изменения карточки
+def change_card(update, _):
+    update.message.reply_text(
+        'Enter ID of active card, to change. Or /cancel to abort', reply_markup=ReplyKeyboardRemove())
+    return ID_CARD
+
+# номер ID карты для изменения
+def id_card(update, _):
+    global card_id
+    card_id = update.message.text
+    print(card_id)
+    reply_keyboard = [['Name', 'Type_of_card', 'Comment', 'Time_to_do']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+    update.message.reply_text(
+        'Choose data field to change. Or /cancel to abort', reply_markup=markup_key)
+    return DATA_FIELD
+
+# поле для изменения
+def data_field(update, _):
+    global card_field
+    card_field = update.message.text
+    print(card_field)
+    update.message.reply_text(
+        'Enter new data. Or /cancel to abort', reply_markup=ReplyKeyboardRemove())
+    return DATA_CHANGE
+
+# новые данные
+def data_change(update, _):
+    global card_change
+    card_change = update.message.text
+    print(card_change)
+    # WWB.rewrite_base(
+    # WWB.change(WWB.take_from_base(path_full), Dic.card_id_dict[what_to_change], Dic.card_type[new_info],
+    #             id_to_cange), path_full)
+    reply_keyboard = [['Yes', 'No']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+    update.message.reply_text(
+        'Something else?', reply_markup=markup_key)
+    return ELSE
+
+# старт удаления карточки
+def delete_card(update, _):
+    update.message.reply_text(
+        'Enter ID of active card, to delete. Or /cancel to abort', reply_markup=ReplyKeyboardRemove())
+    return APPROVMENT
+
+# Подтверждение удаления
+def approvment(update, _):
+    global remove_card
+    remove_card = update.message.text
+    print(remove_card)
+    reply_keyboard = [['Yes', 'No']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+    update.message.reply_text(
+        'Are you sure?', reply_markup=markup_key)
+    return DEL_CARD
+
+# функция удаления
+def del_card(update, _):
+    print(update.message.text)
+    # if update.message.text == 'Yes':
+    # удаление карточки
+    update.message.reply_text(
+        'Well done', reply_markup=ReplyKeyboardRemove())
+    reply_keyboard = [['Yes', 'No']]
+    markup_key = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True, one_time_keyboard=True)
+    update.message.reply_text(
+        'Something else?', reply_markup=markup_key)
+    return ELSE
+
+
+global id_login, id_pass, \
+    path_full, path_active, path_deleted, path_done, \
+    new_login, approve, \
+    card_name, card_toc, card_comment, card_ttd, \
+    find_type, find_rel, \
+    card_id, card_field, card_change, \
+    remove_card
+
+approve = False
+
+LOGIN, PASSWORD, CREATE = range(3)
+NAME, TOC, COMMENT, TTD, ELSE = range(5)
+FIND, RELEVANCE, ELSE = range(3)
+ID_CARD, DATA_FIELD, DATA_CHANGE, ELSE = range(4)
+APPROVMENT, DEL_CARD, ELSE = range(3)
 
 user_path = os.path.join('Data_base', 'user_base.json')
 
 with open(user_path) as file:
     global user_base
     user_base = json.load(file)
-
-
-# test_path = os.path.join('Data_base', '1_Test', '1_Test_full_list.json')
-
-# with open(test_path) as file:
-#     global test_card_bot
-#     test_card_bot = json.load(file)
